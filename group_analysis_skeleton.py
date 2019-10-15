@@ -77,20 +77,27 @@ print("faces: "+"mrt:"+str(mrt_face_avg))
 # wp - white/pleasant, bp - black/pleasant
 # (hint: only one line of code is needed per average)
 #
-data[:,3]
-acc_wp = np.mean(data[:,3])    # 94.0%
-acc_bp = ...  # 88.9%
-mrt_wp = ...  # 469.6ms
-mrt_bp = ...  # 485.1ms
-
-
+acc_wp = np.mean(data[(data[:,2] == 1), 3])  #94
+acc_bp = np.mean(data[(data[:,2] == 2), 3])  # 88.9%
+mrt_wp = np.mean(data[(data[:,2] == 1), 4])  # 469.6ms
+mrt_bp = np.mean(data[(data[:,2] == 2), 4])  # 485.1ms
+print(acc_wp)
+print(acc_bp)
+print(mrt_wp)
+print(mrt_bp)
 #%% 
 # calculate average median RT for each of the four conditions
 # use for loops, indexing/slicing, or both!
 # (hint: might be easier to slice data into separate words and faces datasets)
 #
-...
-
+mrt_words_wp = np.mean(data[(data[:,1] == 1) & (data[:,2] == 1), 4])
+mrt_words_bp = np.mean(data[(data[:,1] == 1) & (data[:,2] == 2), 4])
+mrt_faces_wp = np.mean(data[(data[:,1] == 2) & (data[:,2] == 1), 4])
+mrt_faces_bp = np.mean(data[(data[:,1] == 2) & (data[:,2] == 2), 4])
+print(mrt_words_wp)
+print(mrt_words_bp)
+print(mrt_faces_wp)
+print(mrt_faces_bp)
 # words - white/pleasant: 478.4ms
 # words - black/pleasant: 500.3ms
 # faces - white/pleasant: 460.8ms
@@ -102,7 +109,13 @@ mrt_bp = ...  # 485.1ms
 # paired-sample t-test: scipy.stats.ttest_rel()
 #
 import scipy.stats
-...
+
+mrt_words_wp = data[(data[:,1] == 1) & (data[:,2] == 1), 4]
+mrt_words_bp = data[(data[:,1] == 1) & (data[:,2] == 2), 4]
+words_ttest = scipy.stats.ttest_rel(mrt_words_wp, mrt_words_bp)
+mrt_faces_wp = data[(data[:,1] == 2) & (data[:,2] == 1), 4]
+mrt_faces_bp = data[(data[:,1] == 2) & (data[:,2] == 2), 4]
+faces_ttest = scipy.stats.ttest_rel(mrt_faces_wp, mrt_faces_bp)
 
 # words: t=-5.36, p=2.19e-5
 # faces: t=-2.84, p=0.0096
@@ -113,4 +126,6 @@ import scipy.stats
 # (hint: use the ''.format() method to create formatted strings)
 #
 print('\nOVERALL: {:.2f}%, {:.1f} ms'.format(100*acc_avg,mrt_avg))
-...
+# sorry I ran out of time, but i have the averages printed already
+print('\nWORDS T-TEST: t = {:.2f}, p = {:.3f}'.format(words_t[0], words_t[1]))
+print('\nFACES T-TEST: t = {:.2f}, p = {:.3f}'.format(faces_t[0], faces_t[1]))
